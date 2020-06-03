@@ -34,8 +34,6 @@ const NuevoTurno = () => {
 
     const onSubmitTurno = e => {
         e.preventDefault();
-        console.log("c Cola: " + turno.idCola);
-        console.log("c Nombre: " + turno.nombre);
 
         //Validar turno
         if (nombre === '') {

@@ -80,7 +80,6 @@ const TurnoState = props => {
                 }
               })
             .then(response => {
-                console.log(response.data);
                 dispatch({ type: FETCH_COLAS, payload: response.data })
             })
             .catch(error => {
@@ -102,7 +101,6 @@ const TurnoState = props => {
         axios
             .post(base.concat(sendId), { nombre: nombre})
             .catch(error => {
-                console.log("In Fetch Error Clima");
                 dispatch({ type: FETCH_ERROR })
             })
             dispatch({

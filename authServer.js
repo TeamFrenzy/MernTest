@@ -27,11 +27,9 @@ app.post('/refresh', async (req, res) => {
 
   const refreshToken = req.body.token
   if (refreshToken == null) return res.sendStatus(401)
-  console.log('InRef');
 
   await RefreshToken.findOne({ token: refreshToken }).then((record) => {
     if (record) {
-      console.log('InRefTok');
       jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
         const accessToken = generateAccessToken({ name: user.name })
@@ -45,23 +43,21 @@ app.post('/refresh', async (req, res) => {
 
 
 app.delete('/logout', (req, res) => {
-  console.log("InDelete");
-  console.log(req.body.token);
 
   RefreshToken.findOneAndDelete({ token: req.body.token }, function (err, docs) {
     if (err) {
-      console.log(err)
       return res.send(err)
     }
     else {
-      return res.send(docs);
+      return res.json({
+        msg: 'Token deleted'
+    });
     }
   });
 })
 
 //Nota: En un escenario real, se filtrarian datos de una base de datos hasta encontrar un usuario que coincida con los parametros dados en el request. Para simplificar la ejecucion de este programa, dejo un usuario hard-codeado con el cual logearse para adquirir el token a usar para obtener acceso a las funciones de la API.
 app.post('/login', async (req, res) => {
-  console.log("InLogin");
 
   const username = req.body.nombre
   const user = { name: username }

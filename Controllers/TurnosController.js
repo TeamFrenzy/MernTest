@@ -8,7 +8,6 @@ const Atendidos = require('../models/Atendidos');
 
 //Inserta nuevo turno en cola
 router.post('/nuevo_turno/:id', authenticateToken, (req, res) => {
-    const { id } = req.params;
     const { nombre } = req.body;
     var counter = 0;
     Queue.findOne({ id: req.params.id }).then(function (record) {
@@ -26,7 +25,9 @@ router.post('/nuevo_turno/:id', authenticateToken, (req, res) => {
                 }
             },
             { new: true }, (err, result) => {
-                res.json(result);
+                return res.json({
+                msg: 'Your data has been saved!'
+            });
             })
     })
 })
@@ -45,20 +46,15 @@ router.get('/lista', async (req, res) => {
 
     await Queue.find().stream()
         .on('data', function (record) {
-            console.log(record.nombre);
-            console.log(record.turnos.length);
             noCount = noCount + record.turnos.length;
-            console.log("NoAtendidos:" + noCount);
         })
         .on('error', function (err) {
+            return res.send(err);
         })
         .on('end', function () {
         });
-    console.log("AtendidosF:" + atCount);
-    console.log("NoAtendidosF:" + noCount);
 
     await Atendidos.countDocuments({}, function (err, result) {
-        console.log('Atendidos: ' + result)
         atCount = result;
     });
 

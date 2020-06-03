@@ -11,7 +11,6 @@ router.post('/nuevo_usuario', authenticateToken, async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        console.log(hashedPassword)
 
         var pat = new Usuario({
             id: req.body.id,
@@ -22,7 +21,7 @@ router.post('/nuevo_usuario', authenticateToken, async (req, res) => {
         pat.save();
 
         return res.json({
-            msg: 'Message in a bottle'
+            msg: 'Your data has been saved'
         })
     } catch {
         res.status(500).send()
@@ -34,11 +33,12 @@ router.delete('/eliminar_usuario/:id', authenticateToken, async (req, res) => {
 
     Usuario.findOneAndDelete({ id: req.params.id }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
-            return res.send(docs);
+            return res.json({
+            msg: 'User deleted'
+        });
         }
     })
 });
@@ -47,15 +47,15 @@ router.delete('/eliminar_usuario/:id', authenticateToken, async (req, res) => {
 router.patch('/modificar_usuario/:id', authenticateToken, async (req, res) => {
     
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    console.log(hashedPassword)
 
     Usuario.findOneAndUpdate({ id: req.params.id }, { nombre: req.body.nombre, password: hashedPassword }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
-            return res.send(docs);
+            return res.json({
+                msg: 'User updated'
+            });
         }
     })
 });
@@ -65,7 +65,6 @@ router.get('/leer_usuario/:id', authenticateToken, async (req, res) => {
 
     Usuario.findOne({ id: req.params.id }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
@@ -79,7 +78,6 @@ router.get('/leer_usuarios', authenticateToken, async (req, res) => {
 
     Usuario.find({ }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {

@@ -33,11 +33,12 @@ router.delete('/eliminar_cola/:id', authenticateToken, (req, res) => {
 
     Queue.findOneAndDelete({ id: req.params.id }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
-            return res.send(docs);
+            return res.json({
+                msg: 'Deleted'
+            });
         }
     })
 })
@@ -46,11 +47,12 @@ router.delete('/eliminar_cola/:id', authenticateToken, (req, res) => {
 router.patch('/modificar_cola/:id', authenticateToken, (req, res) => {
     Queue.findOneAndUpdate({ id: req.params.id }, { nombre: req.body.nombre }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
-            return res.send(docs);
+            return res.json({
+            msg: 'Updated'
+        });
         }
     })
 })
@@ -59,7 +61,6 @@ router.patch('/modificar_cola/:id', authenticateToken, (req, res) => {
 router.get('/leer_cola/:id', authenticateToken, (req, res) => {
     Queue.findOne({ id: req.params.id }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
@@ -81,7 +82,6 @@ router.get('/lista', async (req, res) => {
 
     Queue.find({ }, function (err, docs) {
         if (err) {
-            console.log(err)
             return res.send(err)
         }
         else {
